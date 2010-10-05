@@ -1,0 +1,2 @@
+module HashMapper
+end

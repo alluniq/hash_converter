@@ -7,6 +7,9 @@ GEM
   remote: http://rubygems.org/
   specs:
     diff-lcs (1.1.2)
+    mocha (0.9.8)
+      rake
+    rake (0.8.7)
     rspec (2.0.0.rc)
       rspec-core (= 2.0.0.rc)
       rspec-expectations (= 2.0.0.rc)
@@ -24,4 +27,5 @@ PLATFORMS
 DEPENDENCIES
   bundler (>= 1.0.0)
   hash_mapper!
+  mocha (>= 0.9.8)
   rspec (>= 2.0.0.rc)

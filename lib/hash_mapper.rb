@@ -7,7 +7,7 @@ class HashMapper
 
   Types = [String, Integer, Float, Time, Date, DateTime]
 
-  def self.parse(hash, &block)
+  def self.parse(hash = {}, &block)
     @hash = hash.namespace_flatten(SEPARATOR)
     @parsed = {}
     @@path = []

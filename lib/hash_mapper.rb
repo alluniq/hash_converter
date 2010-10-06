@@ -23,6 +23,6 @@ class HashMapper
 
     def self.map(input, output)
       key = @@path + [input]
-      @parsed[output] = @hash[key.join(SEPARATOR)]
+      @parsed[output.to_s] = @hash[key.join(SEPARATOR).to_s]
     end
 end

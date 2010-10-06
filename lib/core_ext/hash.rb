@@ -1,13 +1,16 @@
 class Hash
-  def namespace_flatten(separator = ".", namespace = "")
+  @@namespace = []
+  def namespace_flatten(separator = ".")
     h = {}
     self.each do |key, value|
       k = key.to_s
-      unless value.is_a?(Hash)
-        h[namespace+k] = value
+      if value.is_a?(Hash)
+        @@namespace << k
+        h.merge! value.namespace_flatten(separator)
+        @@namespace.pop
       else
-        namespace += k+separator
-        h.merge! value.namespace_flatten(separator, namespace)
+        key = @@namespace + [k]
+        h[key.join(separator)] = value
       end
     end
     h

@@ -26,11 +26,24 @@ Usage
         end
 
         path "hiring_org.contact" do
+          set('contacts', [{
+            :name  => get('person_name.given_name\sperson_name.family_name'),
+            :title => get('position_title'),
+            :phone => get('voice_number'),
+            :email => get('e_mail')
+          }])
+
           map "emp_contact>voice_number.tel_number", "employer.phone"
           path "emp_address" do
             map "delivery_address.address_line\npostal_code\smunicipality", "employer.mail_address"
           end
         end
       end
-      map :date, lambda { |v| Time.parse(v).strftime("%Y-%m-%d") }
+
+      set('contacts', [{
+        :name => get('contact>person_name.given_name\scontact>person_name.family_name'),
+        :title => get('contact>position_title'),
+        :phone = get('contact>voice_number').map { |number| "#{number[:tel_number]} (#{number[:type]})" }.join(','),
+        :email => get('contact>e_mail')
+      }])
     end

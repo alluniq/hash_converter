@@ -71,6 +71,7 @@ describe HashMapper do
               map :text, :barfoo
             end
           end
+
           path "foo" do
             path "test" do
               map :text, :testfoo
@@ -134,6 +135,73 @@ describe HashMapper do
           map :foobar, :foo, :to_i
         }.should == {
           "foo" => 123
+        }
+      end
+    end
+
+    describe "#get" do
+      before do
+        @hash = { :foo => { :bar => "foobar" }}
+      end
+
+      it "should return value from given hash" do
+        HashMapper.parse(@hash) {
+         @@var = get "foo.bar"
+        }
+        @@var.should == "foobar"
+      end
+
+      it "should works properly when nested into path" do
+        HashMapper.parse(@hash) {
+          path "foo" do
+            @@var = get "bar"
+          end
+        }
+
+        @@var.should == "foobar"
+      end
+    end
+
+    describe "#set" do
+      it "should set value for key" do
+        HashMapper.parse {
+          set "foo", "bar"
+        }.should == {
+          "foo" => "bar"
+        }
+      end
+
+      it "should set value for namespaced key" do
+        HashMapper.parse {
+          set "foo.bar", "foobar"
+        }.should == {
+          "foo" => {
+            "bar" => "foobar"
+          }
+        }
+      end
+
+      it "should set value for namespaced key inside path" do
+        HashMapper.parse do
+          path "ns" do
+            set "foo.bar", "foobar"
+          end
+        end.should == {
+          "ns" => {
+            "foo" => {
+              "bar" => "foobar"
+            }
+          }
+        }
+      end
+    end
+
+    describe "get and set combined" do
+      it "should set value from #get" do
+        HashMapper.parse({ "foo" => { "bar" => "foobar" }}) {
+          set "test", get("foo.bar")
+        }.should == {
+          "test" => "foobar"
         }
       end
     end

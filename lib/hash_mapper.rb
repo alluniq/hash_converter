@@ -26,11 +26,8 @@ class HashMapper
     end
 
     def self.map(input, output, type_or_symbol = nil, &block)
-      key = @@path + [input]
-      key = key.join(SEPARATOR).to_s
-
-      if @hash.has_key?(key)
-        hash_value = type_or_symbol.nil? ? @hash[key] : typecast(@hash[key], type_or_symbol)
+      if value = self.get(input)
+        hash_value = type_or_symbol.nil? ? value : typecast(value, type_or_symbol)
 
         condition = true
         if block_given?
@@ -73,5 +70,18 @@ class HashMapper
           value
         end
       end
+    end
+
+    def self.namespaced_key(key)
+      (@@path + [key]).join(SEPARATOR).to_s
+    end
+
+    def self.get(key)
+      key = namespaced_key(key)
+      @hash.has_key?(key) ? @hash[key] : nil
+    end
+
+    def self.set(key, value)
+      @parsed[namespaced_key(key)] = value
     end
 end

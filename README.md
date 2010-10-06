@@ -17,8 +17,8 @@ Usage
         end
 
         path "post_details" do
-          map_date "start_date.data", "duration.starts"
-          map_date "end_date.data", "duration.ends"
+          map "start_date.data", "duration.starts", Date
+          map "end_date.data", "duration.ends", Date
         end
 
         path "hrxml_entension.amsdk_extension" do

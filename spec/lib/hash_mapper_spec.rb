@@ -119,5 +119,57 @@ describe HashMapper do
         p.should == {}
       end
     end
+
+    describe "typecasting" do
+      it "should typecast to given type" do
+        HashMapper.parse({ :foobar => "123" }){
+          map :foobar, :foo, Integer
+        }.should == {
+          "foo" => 123
+        }
+      end
+
+      it "should invoke method given by symbol" do
+        HashMapper.parse({ :foobar => "123" }){
+          map :foobar, :foo, :to_i
+        }.should == {
+          "foo" => 123
+        }
+      end
+    end
+  end
+
+  describe "#typecast" do
+    it "should invoke method" do
+      object = mock().stubs(:cool_method)
+      object.expects(:cool_method)
+      HashMapper.typecast(object, :cool_method)
+    end
+
+    describe "casting to type" do
+      it "string" do
+        HashMapper.typecast(123, String).should == "123"
+      end
+
+      it "integer" do
+        HashMapper.typecast("123", Integer).should == 123
+      end
+
+      it "float" do
+        HashMapper.typecast("123.45", Float).should == 123.45
+      end
+
+      it "time" do
+        HashMapper.typecast("16:30", Time).should == Time.parse("16:30")
+      end
+
+      it "date" do
+        HashMapper.typecast("01-02-2003", Date).should == Date.parse("01-02-2003")
+      end
+
+      it "datetime" do
+        HashMapper.typecast("01-02-2003 15:30", DateTime).should == DateTime.parse("01-02-2003 15:30")
+      end
+    end
   end
 end

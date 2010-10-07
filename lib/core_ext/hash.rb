@@ -16,4 +16,20 @@ class Hash
     end
     hash
   end
+
+  def namespace_unflatten(separator = ".")
+    hash = {}
+    self.each do |key, value|
+      hash.merge! self.class.nested_value(value, key.split(separator))
+    end
+    hash
+  end
+
+  def self.nested_value(x, p)
+    hash = { p.pop => x }
+    p.reverse_each do |element|
+        hash = { element => hash }
+    end
+    hash
+  end
 end

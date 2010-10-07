@@ -1,6 +1,6 @@
-require "core_ext/hash"
 require "date"
 require "time"
+require "core_ext/hash"
 
 class HashMapper
   SEPARATOR = "."

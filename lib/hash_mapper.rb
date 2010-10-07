@@ -27,22 +27,26 @@ class HashMapper
 
     def self.map(input, output, type_or_symbol = nil, &block)
       if value = self.get(input)
-        hash_value = type_or_symbol.nil? ? value : typecast(value, type_or_symbol)
+        value = if type_or_symbol.is_a?(Symbol)
+          value.send(type_or_symbol)
+        elsif type_or_symbol.is_a?(Class)
+          typecast(value, type_or_symbol)
+        else
+          value
+        end
 
         condition = true
         if block_given?
-          condition = yield hash_value
+          condition = yield value
         end
 
-        @converted[output.to_s] = hash_value if condition
+        @converted[output.to_s] = value if condition
       end
     end
 
-    def self.typecast(value, type_or_symbol)
-      if type_or_symbol.is_a?(Symbol)
-        value.send(type_or_symbol)
-      elsif type_or_symbol.is_a?(Class) && Types.include?(type_or_symbol)
-        case type_or_symbol.to_s
+    def self.typecast(value, type)
+      if Types.include?(type)
+        case type.to_s
         when "String"
           value.to_s
         when "Integer"

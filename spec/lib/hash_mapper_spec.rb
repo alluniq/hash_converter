@@ -208,12 +208,6 @@ describe HashMapper do
   end
 
   describe "#typecast" do
-    it "should invoke method" do
-      object = mock().stubs(:cool_method)
-      object.expects(:cool_method)
-      HashMapper.typecast(object, :cool_method)
-    end
-
     describe "casting to type" do
       it "string" do
         HashMapper.typecast(123, String).should == "123"

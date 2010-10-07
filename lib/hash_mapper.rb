@@ -7,14 +7,14 @@ class HashMapper
 
   Types = [String, Integer, Float, Time, Date, DateTime]
 
-  def self.parse(hash = {}, &block)
+  def self.convert(hash = {}, &block)
     @hash = hash.namespace_flatten(SEPARATOR)
-    @parsed = {}
+    @converted = {}
     @path = []
 
     instance_eval(&block)
 
-    @parsed
+    @converted
   end
 
   private
@@ -34,7 +34,7 @@ class HashMapper
           condition = yield hash_value
         end
 
-        @parsed[output.to_s] = hash_value if condition
+        @converted[output.to_s] = hash_value if condition
       end
     end
 
@@ -82,6 +82,6 @@ class HashMapper
     end
 
     def self.set(key, value)
-      @parsed[namespaced_key(key)] = value
+      @converted[namespaced_key(key)] = value
     end
 end

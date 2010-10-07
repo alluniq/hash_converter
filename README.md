@@ -6,7 +6,7 @@ Ruby DSL for parsing hashes.
 Usage
 -----
 
-    HashMapper.parse(hash) do |d|
+    HashMapper.convert(hash) do |d|
       path "job_position_information" do
         path "job_position_description" do
           map "job_position_title" "title"

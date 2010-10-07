@@ -10,7 +10,7 @@ describe HashMapper do
           :key3 => "val3"
         }
 
-        p = HashMapper.parse(h) do
+        p = HashMapper.convert(h) do
           map "key1", "a"
           map "key2", "b"
           map "key3", "c"
@@ -24,7 +24,7 @@ describe HashMapper do
           :key  => "value"
         }
 
-        HashMapper.parse(h) {
+        HashMapper.convert(h) {
           map "key", "foo"
           map "foobar", "foobar"
         }.should == {
@@ -48,7 +48,7 @@ describe HashMapper do
       end
 
       it "should allow take symbol as argument" do
-        p = HashMapper.parse(@hash) do
+        p = HashMapper.convert(@hash) do
           path "foo" do
             path "bar" do
               map "text", "barfoo"
@@ -65,7 +65,7 @@ describe HashMapper do
       end
 
       it "should allow take string as argument" do
-        p = HashMapper.parse(@hash) do
+        p = HashMapper.convert(@hash) do
           path "foo" do
             path "bar" do
               map :text, :barfoo
@@ -91,7 +91,7 @@ describe HashMapper do
           }
         }
 
-        p = HashMapper.parse(h) do
+        p = HashMapper.convert(h) do
           path "test" do
             map "valid", "foobar" do |value|
               value < 200
@@ -109,7 +109,7 @@ describe HashMapper do
           }
         }
 
-        p = HashMapper.parse(h) do
+        p = HashMapper.convert(h) do
           path "test" do
             map "valid", "foobar" do |value|
               value > 200
@@ -123,7 +123,7 @@ describe HashMapper do
 
     describe "typecasting" do
       it "should typecast to given type" do
-        HashMapper.parse({ :foobar => "123" }){
+        HashMapper.convert({ :foobar => "123" }){
           map :foobar, :foo, Integer
         }.should == {
           "foo" => 123
@@ -131,7 +131,7 @@ describe HashMapper do
       end
 
       it "should invoke method given by symbol" do
-        HashMapper.parse({ :foobar => "123" }){
+        HashMapper.convert({ :foobar => "123" }){
           map :foobar, :foo, :to_i
         }.should == {
           "foo" => 123
@@ -145,14 +145,14 @@ describe HashMapper do
       end
 
       it "should return value from given hash" do
-        HashMapper.parse(@hash) {
+        HashMapper.convert(@hash) {
          @@var = get "foo.bar"
         }
         @@var.should == "foobar"
       end
 
       it "should works properly when nested into path" do
-        HashMapper.parse(@hash) {
+        HashMapper.convert(@hash) {
           path "foo" do
             @@var = get "bar"
           end
@@ -164,7 +164,7 @@ describe HashMapper do
 
     describe "#set" do
       it "should set value for key" do
-        HashMapper.parse {
+        HashMapper.convert {
           set "foo", "bar"
         }.should == {
           "foo" => "bar"
@@ -172,7 +172,7 @@ describe HashMapper do
       end
 
       it "should set value for namespaced key" do
-        HashMapper.parse {
+        HashMapper.convert {
           set "foo.bar", "foobar"
         }.should == {
           "foo" => {
@@ -182,7 +182,7 @@ describe HashMapper do
       end
 
       it "should set value for namespaced key inside path" do
-        HashMapper.parse do
+        HashMapper.convert do
           path "ns" do
             set "foo.bar", "foobar"
           end
@@ -198,7 +198,7 @@ describe HashMapper do
 
     describe "get and set combined" do
       it "should set value from #get" do
-        HashMapper.parse({ "foo" => { "bar" => "foobar" }}) {
+        HashMapper.convert({ "foo" => { "bar" => "foobar" }}) {
           set "test", get("foo.bar")
         }.should == {
           "test" => "foobar"

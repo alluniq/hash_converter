@@ -10,7 +10,7 @@ class HashMapper
   def self.parse(hash = {}, &block)
     @hash = hash.namespace_flatten(SEPARATOR)
     @parsed = {}
-    @@path = []
+    @path = []
 
     instance_eval(&block)
 
@@ -20,9 +20,9 @@ class HashMapper
   private
 
     def self.path(path, &block)
-      @@path.push(path)
+      @path.push(path)
       instance_eval(&block)
-      @@path.pop
+      @path.pop
     end
 
     def self.map(input, output, type_or_symbol = nil, &block)
@@ -73,7 +73,7 @@ class HashMapper
     end
 
     def self.namespaced_key(key)
-      (@@path + [key]).join(SEPARATOR).to_s
+      (@path + [key]).join(SEPARATOR).to_s
     end
 
     def self.get(key)

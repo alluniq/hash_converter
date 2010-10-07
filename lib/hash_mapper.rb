@@ -26,22 +26,21 @@ class HashMapper
     end
 
     def self.map(input, output, type_or_symbol = nil, &block)
-      if value = self.get(input)
-        value = if type_or_symbol.is_a?(Symbol)
-          value.send(type_or_symbol)
-        elsif type_or_symbol.is_a?(Class)
-          typecast(value, type_or_symbol)
-        else
-          value
-        end
-
-        condition = true
-        if block_given?
-          condition = yield value
-        end
-
-        @converted[output.to_s] = value if condition
+      value = self.get(input)
+      value = if type_or_symbol.is_a?(Symbol)
+        value.send(type_or_symbol)
+      elsif type_or_symbol.is_a?(Class)
+        typecast(value, type_or_symbol)
+      else
+        value
       end
+
+      condition = true
+      if block_given?
+        condition = yield value
+      end
+
+      @converted[output.to_s] = value if condition
     end
 
     def self.typecast(value, type)

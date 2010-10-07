@@ -19,16 +19,15 @@ describe HashMapper do
         p.should == { "a" => "val1", "b" => "val2", "c" => "val3" }
       end
 
-      it "should not map keys that not exists" do
-        h = {
-          :key  => "value"
-        }
-
-        HashMapper.convert(h) {
+      it "should map keys that not exists as nil value" do
+        HashMapper.convert({ :key => "value", :nilkey => nil }) {
           map "key", "foo"
           map "foobar", "foobar"
+          map "nilkey", "nil"
         }.should == {
-          "foo" => "value"
+          "foo" => "value",
+          "foobar" => nil,
+          "nil" => nil
         }
       end
     end

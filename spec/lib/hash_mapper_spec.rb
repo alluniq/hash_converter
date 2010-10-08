@@ -46,6 +46,14 @@ describe HashMapper do
         }
       end
 
+      it "should take namespaced path name" do
+        HashMapper.convert(@hash) do
+          path "foo.bar" do
+            map :text, :foo
+          end
+        end.should == { :foo => "foobar" }
+      end
+
       it "should allow take symbol as argument" do
         p = HashMapper.convert(@hash) do
           path :foo do

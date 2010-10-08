@@ -48,14 +48,14 @@ describe HashMapper do
 
       it "should allow take symbol as argument" do
         p = HashMapper.convert(@hash) do
-          path "foo" do
-            path "bar" do
-              map "text", "barfoo"
+          path :foo do
+            path :bar do
+              map :text, :barfoo
             end
           end
-          path "foo" do
-            path "test" do
-              map "text", "testfoo"
+          path :foo do
+            path :test do
+              map :text, :testfoo
             end
           end
         end

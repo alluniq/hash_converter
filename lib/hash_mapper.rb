@@ -14,7 +14,7 @@ class HashMapper
 
     instance_eval(&block)
 
-    @converted
+    @converted.namespace_unflatten
   end
 
   private

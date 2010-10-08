@@ -99,14 +99,14 @@ describe Hash do
   describe "#namespace_unflatten" do
     before do
       @hash = {
-        :foobar => "a",
-        :foo => {
-          :bar => {
-            :text => "foobar"
+        "foobar" => "a",
+        "foo" => {
+          "bar" => {
+            "text" => "foobar"
           },
-          :a => [1,2,3]
+          "a" => [1,2,3]
         },
-        :b => "b"
+        "b" => "b"
       }
     end
 
@@ -116,15 +116,15 @@ describe Hash do
         "foo.test.text" => "tralalala",
         "foo.footest.text" => "asd"
       }.namespace_unflatten.should == {
-        :foo => {
-          :bar => {
-            :text => "foobar"
+        "foo" => {
+          "bar" => {
+            "text" => "foobar"
           },
-          :test => {
-            :text => "tralalala"
+          "test" => {
+            "text" => "tralalala"
           },
-          :footest => {
-            :text => "asd"
+          "footest" => {
+            "text" => "asd"
           }
         }
       }
@@ -133,14 +133,14 @@ describe Hash do
         "foo.bar.text" => "foobar",
         "foo.test.text" => "tralalala",
         "foo.test.text2" => "test"
-      }.namespace_flatten.should == {
-        :foo => {
-          :bar => {
-            :text => "foobar"
+      }.namespace_unflatten.should == {
+        "foo" => {
+          "bar" => {
+            "text" => "foobar"
           },
-          :test => {
-            :text => "tralalala",
-            :text2 => "test"
+          "test" => {
+            "text" => "tralalala",
+            "text2" => "test"
           }
         }
       }
@@ -152,17 +152,17 @@ describe Hash do
         "foo.foobar.foo" => "foo",
         "foo.barfoo.bar" => "bar",
         "foo.barfoo.foo" => "foo"
-      }.namespace_flatten.should == {
-        :foo => {
-          :bar => "bar",
-          :foo => "foo",
-          :foobar => {
-            :bar => "bar",
-            :foo => "foo"
+      }.namespace_unflatten.should == {
+        "foo" => {
+          "bar" => "bar",
+          "foo" => "foo",
+          "foobar" => {
+            "bar" => "bar",
+            "foo" => "foo"
           },
-          :barfoo => {
-            :bar => "bar",
-            :foo => "foo"
+          "barfoo" => {
+            "bar" => "bar",
+            "foo" => "foo"
           }
         }
       }

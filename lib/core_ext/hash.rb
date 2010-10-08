@@ -1,3 +1,5 @@
+require "active_support/core_ext/hash/deep_merge"
+
 class Hash
   @@namespace = []
 
@@ -20,7 +22,7 @@ class Hash
   def namespace_unflatten(separator = ".")
     hash = {}
     self.each do |key, value|
-      hash.merge! self.class.nested_value(value, key.split(separator))
+      hash.deep_merge! self.class.nested_value(value, key.split(separator))
     end
     hash
   end

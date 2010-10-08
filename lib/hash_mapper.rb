@@ -42,12 +42,11 @@ class HashMapper
         value
       end
 
-      condition = true
       if block_given?
-        condition = yield value
+        value = yield value
       end
 
-      @converted[output.to_s] = value if condition
+      @converted[output.to_s] = value
     end
 
     def self.typecast(value, type)

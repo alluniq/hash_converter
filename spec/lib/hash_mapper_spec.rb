@@ -96,37 +96,21 @@ describe HashMapper do
       end
     end
 
-    describe "conditional mapping" do
-      it "should map argument" do
+    describe "value conversion" do
+      it "should change value passed in block" do
         h = {
           :test => {
-            :valid => 123
+            :valid => "test"
           }
         }
 
         HashMapper.convert(h) do
           path "test" do
             map "valid", "foobar" do |value|
-              value < 200
+              "value_from_block_#{value}"
             end
           end
-        end.should == { :foobar => 123 }
-      end
-
-      it "should not map argument" do
-        h = {
-          :test => {
-            :valid => 123
-          }
-        }
-
-        HashMapper.convert(h) do
-          path "test" do
-            map "valid", "foobar" do |value|
-              value > 200
-            end
-          end
-        end.should == {}
+        end.should == { :foobar => "value_from_block_test" }
       end
     end
 

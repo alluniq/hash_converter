@@ -22,6 +22,23 @@ describe HashMapper do
           :nil => nil
         }
       end
+
+      it "should map keys given as symbol" do
+        h = { :key => "value" }
+        hh = { :new_key => "value" }
+
+        HashMapper.convert(h) do
+          map :key, :new_key
+        end.should == hh
+
+        HashMapper.convert(h) do
+          map "key", :new_key
+        end.should == hh
+
+        HashMapper.convert(h) do
+          map :key, "new_key"
+        end.should == hh
+      end
     end
 
     describe "nesting paths" do

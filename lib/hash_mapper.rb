@@ -56,18 +56,7 @@ class HashMapper
         when "String"
           value.to_s
         when "Integer"
-          #from datamapper
-          value_to_i = value.to_i
-          if value_to_i == 0 && value != '0'
-            value_to_s = value.to_s
-            begin
-              Integer(value_to_s =~ /^(\d+)/ ? $1 : value_to_s)
-            rescue ArgumentError
-              nil
-            end
-          else
-            value_to_i
-          end
+          value.to_i
         when "Float"
           value.to_f
         when "Time"

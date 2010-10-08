@@ -5,6 +5,7 @@ require "core_ext/hash"
 
 class HashMapper
   SEPARATOR = "."
+  KEY_REGEX = /\{([^}]*)\}/
 
   Types = [String, Integer, Float, Time, Date, DateTime]
 
@@ -27,7 +28,12 @@ class HashMapper
     end
 
     def self.map(input, output, type_or_symbol = nil, &block)
-      value = self.get(input)
+      value = if input =~ KEY_REGEX
+        input.gsub(KEY_REGEX) { |var| self.get(var.gsub(/\{|\}/,"")) }
+      else
+        self.get(input)
+      end
+
       value = if type_or_symbol.is_a?(Symbol)
         value.send(type_or_symbol)
       elsif type_or_symbol.is_a?(Class)

@@ -82,6 +82,24 @@ describe HashMapper do
       end
     end
 
+    describe "combined input keys" do
+      it "should join with given white chars" do
+        HashMapper.convert({ :foo => "foo", :bar => "bar" }){
+          map "{foo}\s{bar}", :foobar
+        }.should == {
+          :foobar => "foo\sbar"
+        }
+      end
+
+      it "should join namespaecd keys with given white chars" do
+        HashMapper.convert({ :ns => { :foo => "foo", :bar => "bar" }}){
+          map "{ns.foo}\s{ns.bar}", :foobar
+        }.should == {
+          :foobar => "foo\sbar"
+        }
+      end
+    end
+
     describe "conditional mapping" do
       it "should map argument" do
         h = {

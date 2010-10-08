@@ -35,7 +35,7 @@ Usage
 
           map "emp_contact>voice_number.tel_number", "employer.phone"
           path "emp_address" do
-            map "delivery_address.address_line\npostal_code\smunicipality", "employer.mail_address"
+            map "{delivery_address.address_line}\n{postal_code}\s{municipality}", "employer.mail_address"
           end
         end
       end

@@ -4,19 +4,11 @@ describe HashMapper do
   describe "DSL" do
     describe "maping" do
       it "should map from flat hash" do
-        h = {
-          :key1 => "val1",
-          :key2 => "val2",
-          :key3 => "val3"
-        }
-
-        p = HashMapper.convert(h) do
+        HashMapper.convert({ :key1 => "val1", :key2 => "val2", :key3 => "val3" }) do
           map "key1", "a"
           map "key2", "b"
           map "key3", "c"
-        end
-
-        p.should == { :a => "val1", :b => "val2", :c => "val3" }
+        end.should == { :a => "val1", :b => "val2", :c => "val3" }
       end
 
       it "should map keys that not exists as nil value" do
@@ -55,7 +47,7 @@ describe HashMapper do
       end
 
       it "should allow take symbol as argument" do
-        p = HashMapper.convert(@hash) do
+        HashMapper.convert(@hash) do
           path :foo do
             path :bar do
               map :text, :barfoo
@@ -66,13 +58,11 @@ describe HashMapper do
               map :text, :testfoo
             end
           end
-        end
-
-        p.should == { :barfoo => "foobar", :testfoo => "text" }
+        end.should == { :barfoo => "foobar", :testfoo => "text" }
       end
 
       it "should allow take string as argument" do
-        p = HashMapper.convert(@hash) do
+        HashMapper.convert(@hash) do
           path "foo" do
             path "bar" do
               map :text, :barfoo
@@ -84,9 +74,7 @@ describe HashMapper do
               map :text, :testfoo
             end
           end
-        end
-
-        p.should == { :barfoo => "foobar", :testfoo => "text" }
+        end.should == { :barfoo => "foobar", :testfoo => "text" }
       end
     end
 
@@ -116,15 +104,13 @@ describe HashMapper do
           }
         }
 
-        p = HashMapper.convert(h) do
+        HashMapper.convert(h) do
           path "test" do
             map "valid", "foobar" do |value|
               value < 200
             end
           end
-        end
-
-        p.should == { :foobar => 123 }
+        end.should == { :foobar => 123 }
       end
 
       it "should not map argument" do
@@ -134,15 +120,13 @@ describe HashMapper do
           }
         }
 
-        p = HashMapper.convert(h) do
+        HashMapper.convert(h) do
           path "test" do
             map "valid", "foobar" do |value|
               value > 200
             end
           end
-        end
-
-        p.should == {}
+        end.should == {}
       end
     end
 

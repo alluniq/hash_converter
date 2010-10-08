@@ -198,4 +198,22 @@ describe Hash do
       }
     end
   end
+
+  describe "#def recursive_symbolize_keys!" do
+    it "should symbolize keys in nested hashes" do
+      { 
+        "foo" => {
+          "bar" => {
+            "foobar" => "foobar"
+          }
+        }
+      }.recursive_symbolize_keys!.should == {
+        :foo => {
+          :bar => {
+            :foobar => "foobar"
+          }
+        }
+      }
+    end
+  end
 end

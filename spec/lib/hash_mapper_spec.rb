@@ -16,7 +16,7 @@ describe HashMapper do
           map "key3", "c"
         end
 
-        p.should == { "a" => "val1", "b" => "val2", "c" => "val3" }
+        p.should == { :a => "val1", :b => "val2", :c => "val3" }
       end
 
       it "should map keys that not exists as nil value" do
@@ -25,9 +25,9 @@ describe HashMapper do
           map "foobar", "foobar"
           map "nilkey", "nil"
         }.should == {
-          "foo" => "value",
-          "foobar" => nil,
-          "nil" => nil
+          :foo => "value",
+          :foobar => nil,
+          :nil => nil
         }
       end
     end
@@ -60,7 +60,7 @@ describe HashMapper do
           end
         end
 
-        p.should == { "barfoo" => "foobar", "testfoo" => "text" }
+        p.should == { :barfoo => "foobar", :testfoo => "text" }
       end
 
       it "should allow take string as argument" do
@@ -78,7 +78,7 @@ describe HashMapper do
           end
         end
 
-        p.should == { "barfoo" => "foobar", "testfoo" => "text" }
+        p.should == { :barfoo => "foobar", :testfoo => "text" }
       end
     end
 
@@ -98,7 +98,7 @@ describe HashMapper do
           end
         end
 
-        p.should == { "foobar" => 123 }
+        p.should == { :foobar => 123 }
       end
 
       it "should not map argument" do
@@ -125,7 +125,7 @@ describe HashMapper do
         HashMapper.convert({ :foobar => "123" }){
           map :foobar, :foo, Integer
         }.should == {
-          "foo" => 123
+          :foo => 123
         }
       end
 
@@ -133,7 +133,7 @@ describe HashMapper do
         HashMapper.convert({ :foobar => "123" }){
           map :foobar, :foo, :to_i
         }.should == {
-          "foo" => 123
+          :foo => 123
         }
       end
     end
@@ -166,7 +166,7 @@ describe HashMapper do
         HashMapper.convert {
           set "foo", "bar"
         }.should == {
-          "foo" => "bar"
+          :foo => "bar"
         }
       end
 
@@ -174,8 +174,8 @@ describe HashMapper do
         HashMapper.convert {
           set "foo.bar", "foobar"
         }.should == {
-          "foo" => {
-            "bar" => "foobar"
+          :foo => {
+            :bar => "foobar"
           }
         }
       end
@@ -186,9 +186,9 @@ describe HashMapper do
             set "foo.bar", "foobar"
           end
         end.should == {
-          "ns" => {
-            "foo" => {
-              "bar" => "foobar"
+          :ns => {
+            :foo => {
+              :bar => "foobar"
             }
           }
         }
@@ -200,7 +200,7 @@ describe HashMapper do
         HashMapper.convert({ "foo" => { "bar" => "foobar" }}) {
           set "test", get("foo.bar")
         }.should == {
-          "test" => "foobar"
+          :test => "foobar"
         }
       end
     end

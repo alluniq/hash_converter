@@ -1,5 +1,6 @@
 require "date"
 require "time"
+require "active_support/core_ext/hash/keys"
 require "core_ext/hash"
 
 class HashMapper
@@ -14,7 +15,7 @@ class HashMapper
 
     instance_eval(&block)
 
-    @converted.namespace_unflatten
+    @converted.namespace_unflatten.recursive_symbolize_keys!
   end
 
   private

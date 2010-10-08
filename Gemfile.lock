@@ -6,6 +6,7 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    activesupport (3.0.0)
     diff-lcs (1.1.2)
     mocha (0.9.8)
       rake
@@ -25,6 +26,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport (>= 3.0.0)
   bundler (>= 1.0.0)
   hash_mapper!
   mocha (>= 0.9.8)

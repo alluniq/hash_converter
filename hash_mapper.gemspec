@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "activesupport", ">= 3.0.0"
 
   s.add_development_dependency "bundler", ">= 1.0.0"
-  s.add_development_dependency "rspec", ">= 2.0.0.rc"
+  s.add_development_dependency "rspec-core", ">= 2.0.0"
   s.add_development_dependency "mocha", ">= 0.9.8"
 
   s.files        = `git ls-files`.split("\n")

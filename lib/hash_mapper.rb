@@ -80,6 +80,6 @@ class HashMapper
     end
 
     def self.set(key, value)
-      @converted[namespaced_key(key)] = value
+      @converted[key] = value
     end
 end

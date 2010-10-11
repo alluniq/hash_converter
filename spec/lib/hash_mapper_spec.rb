@@ -191,16 +191,14 @@ describe HashMapper do
         }
       end
 
-      it "should set value for namespaced key inside path" do
+      it "should ignore path" do
         HashMapper.convert do
           path "ns" do
             set "foo.bar", "foobar"
           end
         end.should == {
-          :ns => {
-            :foo => {
-              :bar => "foobar"
-            }
+          :foo => {
+            :bar => "foobar"
           }
         }
       end

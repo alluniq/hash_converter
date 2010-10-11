@@ -151,7 +151,7 @@ describe HashMapper do
 
     describe "#get" do
       before do
-        @hash = { :foo => { :bar => "foobar" }}
+        @hash = { :foo => { :bar => "foobar" }, :bar => "foo"}
       end
 
       it "should return value from given hash" do
@@ -159,6 +159,13 @@ describe HashMapper do
          @@var = get "foo.bar"
         }
         @@var.should == "foobar"
+      end
+
+      it "should return array of values" do
+        HashMapper.convert(@hash) {
+         @@var = get("foo.bar", "bar")
+        }
+        @@var.should == ["foobar", "foo"]
       end
 
       it "should works properly when nested into path" do
@@ -217,6 +224,15 @@ describe HashMapper do
 
   describe "#typecast" do
     describe "casting to type" do
+
+      it "should handle nils properly" do
+        lambda {
+          HashMapper.convert do
+            map "foo", "foobar", Date
+          end
+        }.should_not raise_error
+      end
+
       it "string" do
         HashMapper.typecast(123, String).should == "123"
       end

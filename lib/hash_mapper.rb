@@ -50,6 +50,8 @@ class HashMapper
     end
 
     def self.typecast(value, type)
+      return value if value.nil?
+
       if Types.include?(type)
         case type.to_s
         when "String"
@@ -74,9 +76,13 @@ class HashMapper
       (@path + [key]).join(SEPARATOR).to_s
     end
 
-    def self.get(key)
-      key = namespaced_key(key)
-      @hash.has_key?(key) ? @hash[key] : nil
+    def self.get(*keys)
+      values = []
+      keys.each do |key|
+        key = namespaced_key(key)
+        values <<  @hash[key]
+      end
+      values.length == 1 ? values.first : values
     end
 
     def self.set(key, value)

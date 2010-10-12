@@ -3,7 +3,7 @@ require "time"
 require "active_support/core_ext/hash/keys"
 require "core_ext/hash"
 
-class HashMapper
+class HashConverter
   SEPARATOR = "."
   KEY_REGEX = /\{([^}]*)\}/
 

@@ -19,7 +19,7 @@ Usage
 
 Simple example:
 
-    require "hash_mapper"
+    require "hash_converter"
     hash = {
       :person => {
         :first_name => "Jonh",
@@ -32,7 +32,7 @@ Simple example:
       }
     }
 
-    hash_converted = HashMapper.convert(hash) do
+    hash_converted = HashConverter.convert(hash) do
       path "person" do
         map "{first_name} {last_name}", "name"
         path "address" do

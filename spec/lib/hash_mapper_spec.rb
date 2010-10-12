@@ -1,10 +1,10 @@
 require "spec_helper"
 
-describe HashMapper do
+describe HashConverter do
   describe "DSL" do
     describe "maping" do
       it "should map from flat hash" do
-        HashMapper.convert({ :key1 => "val1", :key2 => "val2", :key3 => "val3" }) do
+        HashConverter.convert({ :key1 => "val1", :key2 => "val2", :key3 => "val3" }) do
           map "key1", "a"
           map "key2", "b"
           map "key3", "c"
@@ -12,7 +12,7 @@ describe HashMapper do
       end
 
       it "should map keys that not exists as nil value" do
-        HashMapper.convert({ :key => "value", :nilkey => nil }) {
+        HashConverter.convert({ :key => "value", :nilkey => nil }) {
           map "key", "foo"
           map "foobar", "foobar"
           map "nilkey", "nil"
@@ -27,15 +27,15 @@ describe HashMapper do
         h = { :key => "value" }
         hh = { :new_key => "value" }
 
-        HashMapper.convert(h) do
+        HashConverter.convert(h) do
           map :key, :new_key
         end.should == hh
 
-        HashMapper.convert(h) do
+        HashConverter.convert(h) do
           map "key", :new_key
         end.should == hh
 
-        HashMapper.convert(h) do
+        HashConverter.convert(h) do
           map :key, "new_key"
         end.should == hh
       end
@@ -56,7 +56,7 @@ describe HashMapper do
       end
 
       it "should take namespaced path name" do
-        HashMapper.convert(@hash) do
+        HashConverter.convert(@hash) do
           path "foo.bar" do
             map :text, :foo
           end
@@ -64,7 +64,7 @@ describe HashMapper do
       end
 
       it "should allow take symbol as argument" do
-        HashMapper.convert(@hash) do
+        HashConverter.convert(@hash) do
           path :foo do
             path :bar do
               map :text, :barfoo
@@ -79,7 +79,7 @@ describe HashMapper do
       end
 
       it "should allow take string as argument" do
-        HashMapper.convert(@hash) do
+        HashConverter.convert(@hash) do
           path "foo" do
             path "bar" do
               map :text, :barfoo
@@ -97,7 +97,7 @@ describe HashMapper do
 
     describe "combined input keys" do
       it "should join with given white chars" do
-        HashMapper.convert({ :foo => "foo", :bar => "bar" }){
+        HashConverter.convert({ :foo => "foo", :bar => "bar" }){
           map "{foo}\s{bar}", :foobar
         }.should == {
           :foobar => "foo\sbar"
@@ -105,7 +105,7 @@ describe HashMapper do
       end
 
       it "should join namespaecd keys with given white chars" do
-        HashMapper.convert({ :ns => { :foo => "foo", :bar => "bar" }}){
+        HashConverter.convert({ :ns => { :foo => "foo", :bar => "bar" }}){
           map "{ns.foo}\s{ns.bar}", :foobar
         }.should == {
           :foobar => "foo\sbar"
@@ -121,7 +121,7 @@ describe HashMapper do
           }
         }
 
-        HashMapper.convert(h) do
+        HashConverter.convert(h) do
           path "test" do
             map "valid", "foobar" do |value|
               "value_from_block_#{value}"
@@ -133,7 +133,7 @@ describe HashMapper do
 
     describe "typecasting" do
       it "should typecast to given type" do
-        HashMapper.convert({ :foobar => "123" }){
+        HashConverter.convert({ :foobar => "123" }){
           map :foobar, :foo, Integer
         }.should == {
           :foo => 123
@@ -141,7 +141,7 @@ describe HashMapper do
       end
 
       it "should invoke method given by symbol" do
-        HashMapper.convert({ :foobar => "123" }){
+        HashConverter.convert({ :foobar => "123" }){
           map :foobar, :foo, :to_i
         }.should == {
           :foo => 123
@@ -155,21 +155,21 @@ describe HashMapper do
       end
 
       it "should return value from given hash" do
-        HashMapper.convert(@hash) {
+        HashConverter.convert(@hash) {
          @@var = get "foo.bar"
         }
         @@var.should == "foobar"
       end
 
       it "should return array of values" do
-        HashMapper.convert(@hash) {
+        HashConverter.convert(@hash) {
          @@var = get("foo.bar", "bar")
         }
         @@var.should == ["foobar", "foo"]
       end
 
       it "should works properly when nested into path" do
-        HashMapper.convert(@hash) {
+        HashConverter.convert(@hash) {
           path "foo" do
             @@var = get "bar"
           end
@@ -181,7 +181,7 @@ describe HashMapper do
 
     describe "#set" do
       it "should set value for key" do
-        HashMapper.convert {
+        HashConverter.convert {
           set "foo", "bar"
         }.should == {
           :foo => "bar"
@@ -189,7 +189,7 @@ describe HashMapper do
       end
 
       it "should set value for namespaced key" do
-        HashMapper.convert {
+        HashConverter.convert {
           set "foo.bar", "foobar"
         }.should == {
           :foo => {
@@ -199,7 +199,7 @@ describe HashMapper do
       end
 
       it "should ignore path" do
-        HashMapper.convert do
+        HashConverter.convert do
           path "ns" do
             set "foo.bar", "foobar"
           end
@@ -213,7 +213,7 @@ describe HashMapper do
 
     describe "get and set combined" do
       it "should set value from #get" do
-        HashMapper.convert({ "foo" => { "bar" => "foobar" }}) {
+        HashConverter.convert({ "foo" => { "bar" => "foobar" }}) {
           set "test", get("foo.bar")
         }.should == {
           :test => "foobar"
@@ -227,34 +227,34 @@ describe HashMapper do
 
       it "should handle nils properly" do
         lambda {
-          HashMapper.convert do
+          HashConverter.convert do
             map "foo", "foobar", Date
           end
         }.should_not raise_error
       end
 
       it "string" do
-        HashMapper.typecast(123, String).should == "123"
+        HashConverter.typecast(123, String).should == "123"
       end
 
       it "integer" do
-        HashMapper.typecast("123", Integer).should == 123
+        HashConverter.typecast("123", Integer).should == 123
       end
 
       it "float" do
-        HashMapper.typecast("123.45", Float).should == 123.45
+        HashConverter.typecast("123.45", Float).should == 123.45
       end
 
       it "time" do
-        HashMapper.typecast("16:30", Time).should == Time.parse("16:30")
+        HashConverter.typecast("16:30", Time).should == Time.parse("16:30")
       end
 
       it "date" do
-        HashMapper.typecast("01-02-2003", Date).should == Date.parse("01-02-2003")
+        HashConverter.typecast("01-02-2003", Date).should == Date.parse("01-02-2003")
       end
 
       it "datetime" do
-        HashMapper.typecast("01-02-2003 15:30", DateTime).should == DateTime.parse("01-02-2003 15:30")
+        HashConverter.typecast("01-02-2003 15:30", DateTime).should == DateTime.parse("01-02-2003 15:30")
       end
     end
   end

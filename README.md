@@ -1,4 +1,4 @@
-Hash Mapper
+Hash Converter
 ===========
 
 Ruby DSL for parsing hashes.
@@ -10,7 +10,7 @@ hash_mapper is hosted on gemcutter.
 
 If you are using bundle (and you should):
 
-    gem 'hash_mapper'
+    gem 'hash_converter'
 
 Run `bundle` and start hacking.
 

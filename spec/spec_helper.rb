@@ -1,4 +1,4 @@
-require "hash_mapper"
+require "hash_converter"
 require "rspec"
 
 RSpec.configure do |config|

@@ -86,6 +86,6 @@ class HashConverter
     end
 
     def self.set(key, value)
-      @converted[key] = value
+      @converted[key.to_s] = value
     end
 end

@@ -186,6 +186,12 @@ describe HashConverter do
         }.should == {
           :foo => "bar"
         }
+
+        HashConverter.convert {
+          set :foo, "bar"
+        }.should == {
+          :foo => "bar"
+        }
       end
 
       it "should set value for namespaced key" do

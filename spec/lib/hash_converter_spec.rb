@@ -226,6 +226,20 @@ describe HashConverter do
         }
       end
     end
+
+    describe "method delegation" do
+      it "should delegate method" do
+        def foobar(foo)
+          foo
+        end
+
+        HashConverter.convert {
+          set "test", foobar("string")
+        }.should == {
+          :test => "string"
+        }
+      end
+    end
   end
 
   describe "#typecast" do

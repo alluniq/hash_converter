@@ -14,9 +14,14 @@ class HashConverter
     @converted = {}
     @path = []
 
+    @original_self = Kernel.eval("self", block.binding)
     instance_eval(&block)
 
     @converted.namespace_unflatten.recursive_symbolize_keys!
+  end
+
+  def self.method_missing(method, *args, &block)
+    @original_self.send(method, *args, &block)
   end
 
   private

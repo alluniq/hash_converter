@@ -35,6 +35,7 @@ class Hash
     hash
   end
 
+  #TODO - refactor this, looks ugly. Avoid duplications
   def recursive_symbolize_keys!
     symbolize_keys!
     values.each { |h| h.recursive_symbolize_keys! if h.is_a?(Hash) }

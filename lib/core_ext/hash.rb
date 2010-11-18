@@ -22,7 +22,7 @@ class Hash
   def namespace_unflatten(separator = ".")
     hash = {}
     self.each do |key, value|
-      hash.deep_merge! self.class.nested_value(value, key.split(separator))
+      hash.deep_merge! self.class.nested_value(value, key.to_s.split(separator))
     end
     hash
   end

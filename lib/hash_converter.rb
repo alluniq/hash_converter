@@ -9,15 +9,20 @@ class HashConverter
 
   Types = [String, Integer, Float, Time, Date, DateTime]
 
-  def self.convert(hash = {}, &block)
+  def self.convert(hash = {}, create_new = true, &block)
     @hash = hash.namespace_flatten(SEPARATOR)
-    @converted = {}
+
+    @converted = create_new ? {} : @hash
     @path = []
 
     @original_self = Kernel.eval("self", block.binding)
     instance_eval(&block)
 
     @converted.namespace_unflatten.recursive_symbolize_keys!
+  end
+
+  def self.convert!(hash = {}, &block)
+    self.convert(hash, false, &block)
   end
 
   def self.method_missing(method, *args, &block)
@@ -50,6 +55,9 @@ class HashConverter
       if block_given?
         value = yield value
       end
+
+      @converted.delete(input.to_sym)
+      @converted.delete(input)
 
       @converted[output.to_s] = value
     end

@@ -39,6 +39,14 @@ describe HashConverter do
           map :key, "new_key"
         end.should == hh
       end
+
+      it "should convert a hash without creating a new hash" do
+        HashConverter.convert!({ :key1 => "val1", :key2 => "val2", :key3 => {:foo => "val3"}, :key4 => "val4" }) do
+          map "key1", "a"
+          map "key2", "b"
+          map "key3.foo", "key3.c"
+        end.should == {:a => "val1", :b => "val2", :key3 => { :c => "val3" }, :key4 => "val4"}
+      end
     end
 
     describe "nesting paths" do
